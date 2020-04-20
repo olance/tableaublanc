@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tableau Blanc</title>
+</head>
+
+<body>
+<h1 id="lesson-title"></h1>
+<h2>Entre ta réponse pour l'envoyer sur le tableau blanc :</h2>
+
+<form id="answer-form">
+  <p>
+    <label for="author">Prénom :</label>
+    <input type="text" name="author" id="author">
+  </p>
+
+  <p>
+    <label for="answer">Réponse :</label>
+    <input type="text" name="answer" id="answer">
+  </p>
+
+  <input type="submit" value="Envoyer">
+</form>
+
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
+
+<script>
+(async function() {
+  // Your web app's Firebase configuration
+  let firebaseConfig = {
+    apiKey: "AIzaSyC3hhx5TOkre6obyCWd-0fGgSGrgQXqppU",
+    authDomain: "tableaublanc-edfae.firebaseapp.com",
+    databaseURL: "https://tableaublanc-edfae.firebaseio.com",
+    projectId: "tableaublanc-edfae",
+    storageBucket: "tableaublanc-edfae.appspot.com",
+    messagingSenderId: "338342667367",
+    appId: "1:338342667367:web:206957598b4de3311a20c2"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  let $form = document.querySelector("#answer-form");
+
+  let match = location.search.match(/lessonid=([^&]+)/);
+  if (!match || match[1].trim() === "") {
+    alert("L'URL ne contient pas l'ID de cours");
+    return;
+  }
+
+  const lessonId = match[1]
+  let db = firebase.firestore()
+
+  // Get lesson object to display its title
+  let lessonDoc = await db.collection("lessons").doc(lessonId).get()
+  if (!lessonDoc.exists) {
+    alert(`Le cours ${lessonId} n'existe pas !`)
+    $form.querySelectorAll("input").forEach(el => el.disabled = true)
+    return
+  }
+
+  document.querySelector("#lesson-title").innerText = lessonDoc.data().title
+
+  let answers = db.collection("lessons").doc(lessonId).collection("answers")
+  $form.addEventListener("submit", (event) => { // Fat-arrow function
+    event.preventDefault()
+
+    let author = document.querySelector("#author").value;
+    let text = document.querySelector("#answer").value;
+
+    answers.add({ author, text }).then(() => {
+      document.querySelector("#answer").value = "";
+    })
+
+    return false
+  })
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+  <title>Tableau Blanc pour le prof</title>
+</head>
+
+<body>
+<h1 id="lesson-title"></h1>
+
+<ul id="answers"></ul>
+
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
+
+<script>
+(async function() {
+  // Your web app's Firebase configuration
+  let firebaseConfig = {
+    apiKey: "AIzaSyC3hhx5TOkre6obyCWd-0fGgSGrgQXqppU",
+    authDomain: "tableaublanc-edfae.firebaseapp.com",
+    databaseURL: "https://tableaublanc-edfae.firebaseio.com",
+    projectId: "tableaublanc-edfae",
+    storageBucket: "tableaublanc-edfae.appspot.com",
+    messagingSenderId: "338342667367",
+    appId: "1:338342667367:web:206957598b4de3311a20c2"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Get data once: https://firebase.google.com/docs/firestore/query-data/get-data?authuser=0
+  // TODO: Extraire lessonid et récupérer le titre du cours (voir index.html)
+  let match = location.search.match(/lessonid=([^&]+)/);
+  if (!match || match[1].trim() === "") {
+    alert("L'URL ne contient pas l'ID de cours");
+    return;
+  }
+
+  const lessonId = match[1]
+  let db = firebase.firestore()
+
+  // Listen for realtime updates: https://firebase.google.com/docs/firestore/query-data/listen?authuser=0
+  db.collection("lessons").doc(lessonId).collection("answers").orderBy('author').onSnapshot(answersDoc => {
+    let items = answersDoc.docChanges().filter(c => c.type === "added").map(c => {
+      let answer = c.doc.data()
+      let li = document.createElement("li")
+      li.innerHTML = `<b>${answer.author} :</b> ${answer.text}`
+      return li
+    })
+
+    document.querySelector("#answers").append(...items)
+  })
+
+})()
+</script>
+</body>
+
+</html>
