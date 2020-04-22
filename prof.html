@@ -37,18 +37,18 @@
   }
 
   const lessonId = match[1]
-  let db = firebase.firestore()
+  let db = firebase.firestore();
 
   // Listen for realtime updates: https://firebase.google.com/docs/firestore/query-data/listen?authuser=0
-  db.collection("lessons").doc(lessonId).collection("answers").orderBy('author').onSnapshot(answersDoc => {
+  db.collection("lessons").doc(lessonId).collection("answers").orderBy('timestamp').onSnapshot(answersDoc => {
     let items = answersDoc.docChanges().filter(c => c.type === "added").map(c => {
-      let answer = c.doc.data()
-      let li = document.createElement("li")
-      li.innerHTML = `<b>${answer.author} :</b> ${answer.text}`
-      return li
-    })
+      let answer = c.doc.data();
+      let li = document.createElement("li");
+      li.innerHTML = `<em>${answer.timestamp}</em> - <b>${answer.author} :</b> ${answer.text}`;
+      return li;
+    });
 
-    document.querySelector("#answers").append(...items)
+    document.querySelector("#answers").append(...items);
   })
 
 })()

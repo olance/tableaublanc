@@ -27,6 +27,7 @@
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
 
 <script>
+  //TODO : pourquoi la parenthèse ici ->(async ?
 (async function() {
   // Your web app's Firebase configuration
   let firebaseConfig = {
@@ -50,29 +51,31 @@
     return;
   }
 
-  const lessonId = match[1]
-  let db = firebase.firestore()
+  const lessonId = match[1];
+  let db = firebase.firestore();
 
   // Get lesson object to display its title
-  let lessonDoc = await db.collection("lessons").doc(lessonId).get()
+  let lessonDoc = await db.collection("lessons").doc(lessonId).get();
+  // TODO : gros doute, on est d'accord cette fonction est interrompue tant que la réponse L58 n'est pas arrivée ?
   if (!lessonDoc.exists) {
-    alert(`Le cours ${lessonId} n'existe pas !`)
-    $form.querySelectorAll("input").forEach(el => el.disabled = true)
+    alert(`Le cours ${lessonId} n'existe pas !`);
+    $form.querySelectorAll("input").forEach(el => el.disabled = true);
     return
   }
 
-  document.querySelector("#lesson-title").innerText = lessonDoc.data().title
+  document.querySelector("#lesson-title").innerText = lessonDoc.data().title;
 
-  let answers = db.collection("lessons").doc(lessonId).collection("answers")
+  let answers = db.collection("lessons").doc(lessonId).collection("answers");
   $form.addEventListener("submit", (event) => { // Fat-arrow function
-    event.preventDefault()
+    event.preventDefault();
 
     let author = document.querySelector("#author").value;
     let text = document.querySelector("#answer").value;
+    let timestamp = Date.now();
 
-    answers.add({ author, text }).then(() => {
+      answers.add({ author, text,timestamp }).then(() => {
       document.querySelector("#answer").value = "";
-    })
+    });
 
     return false
   })
