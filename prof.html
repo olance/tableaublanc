@@ -14,7 +14,23 @@
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
 
 <script>
-(async function() {
+
+  function addZero(i) {
+    if (i < 10) {
+      i = "0" + i;
+    }
+    return i;
+  }
+
+  function dateFormat(ts) {
+    var d = new Date(ts);
+    var h = addZero(d.getHours());
+    var m = addZero(d.getMinutes());
+    var s = addZero(d.getSeconds());
+    return h + ":" + m + ":" + s;
+  }
+
+  (async function() {
   // Your web app's Firebase configuration
   let firebaseConfig = {
     apiKey: "AIzaSyC3hhx5TOkre6obyCWd-0fGgSGrgQXqppU",
@@ -31,12 +47,13 @@
   let db = firebase.firestore();
 
   // Get data once: https://firebase.google.com/docs/firestore/query-data/get-data?authuser=0
-  // TODO: Extraire lessonid et récupérer le titre du cours (voir index.html)
+  // TODO: (DONE) Extraire lessonid et récupérer le titre du cours (voir index.html)
   let match = location.search.match(/lessonid=([^&]+)/);
   if (!match || match[1].trim() === "") {
     alert("L'URL ne contient pas l'ID de cours");
     return;
   }
+
   // Get lesson object to display its title
   const lessonId = match[1];
   let lessonDoc = await db.collection("lessons").doc(lessonId).get();
@@ -47,14 +64,16 @@
     return
   }
 
-  document.querySelector("#lesson-title").innerText = lessonDoc.data().title;
+  document.querySelector("#lesson-title").innerText = lessonId + " - " + lessonDoc.data().title;
 
   // Listen for realtime updates: https://firebase.google.com/docs/firestore/query-data/listen?authuser=0
   db.collection("lessons").doc(lessonId).collection("answers").orderBy('timestamp').onSnapshot(answersDoc => {
     let items = answersDoc.docChanges().filter(c => c.type === "added").map(c => {
       let answer = c.doc.data();
       let li = document.createElement("li");
-      li.innerHTML = `<em>${answer.timestamp}</em> - <b>${answer.author} :</b> ${answer.text}`;
+      let time = dateFormat(answer.timestamp);
+
+      li.innerHTML = `<em>${time}</em> - <b>${answer.author} :</b> ${answer.text}`;
       return li;
     });
 
