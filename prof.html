@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Tableau Blanc pour le prof</title>
 </head>
 
@@ -27,6 +28,7 @@
 
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
+  let db = firebase.firestore();
 
   // Get data once: https://firebase.google.com/docs/firestore/query-data/get-data?authuser=0
   // TODO: Extraire lessonid et récupérer le titre du cours (voir index.html)
@@ -35,9 +37,17 @@
     alert("L'URL ne contient pas l'ID de cours");
     return;
   }
+  // Get lesson object to display its title
+  const lessonId = match[1];
+  let lessonDoc = await db.collection("lessons").doc(lessonId).get();
 
-  const lessonId = match[1]
-  let db = firebase.firestore();
+  if (!lessonDoc.exists) {
+    alert(`Le cours ${lessonId} n'existe pas !`);
+    $form.querySelectorAll("input").forEach(el => el.disabled = true);
+    return
+  }
+
+  document.querySelector("#lesson-title").innerText = lessonDoc.data().title;
 
   // Listen for realtime updates: https://firebase.google.com/docs/firestore/query-data/listen?authuser=0
   db.collection("lessons").doc(lessonId).collection("answers").orderBy('timestamp').onSnapshot(answersDoc => {
