@@ -1,0 +1,19 @@
+
+Page de "login" élève
+Page de création Dashboard prof
+
+Fonction pour fusionner des mots/messages élèves
+
+Selection de Modes d'affichage:
+- Nuages de mots
+- Postits organisables
+- mindmap
+
+Fonction suivi d'avancement TP/TD
+- points d'étapes de l'activité
+- Affichage des avatar des équipes/élèves dans la progression
+- Définition/affichage des élèves ressource
+- Fonction d'appel élèves/ressource > s'affiche sur le smartphone de l'élève
+- Fonction d'appel du prof > Pour les élèves ressource uniquement
+
+Génération de documents synthèse imprimables
