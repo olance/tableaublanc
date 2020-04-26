@@ -1,3 +1,5 @@
+﻿
+Ajouter gestion des droits
 
 Page de "login" élève
 Page de création Dashboard prof
@@ -8,6 +10,11 @@ Selection de Modes d'affichage:
 - Nuages de mots
 - Postits organisables
 - mindmap
+
+Fonctions de définition/répartition de groupe (aléatoire, au choix ...)
+- Réglage des paramètres au niveau prof
+- Définition de groupes intermédiaires de travail
+
 
 Fonction suivi d'avancement TP/TD
 - points d'étapes de l'activité

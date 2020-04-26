@@ -5,16 +5,16 @@
   <title>Tableau Blanc pour le prof</title>
 </head>
 
-<body>
-<h1 id="lesson-title"></h1>
+<div id=messages-list">
+  <h1 id="lesson-title"></h1>
 
-<ul id="answers"></ul>
+  <ul id="answers"></ul>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
 
 <script>
-
   function addZero(i) {
     if (i < 10) {
       i = "0" + i;
@@ -39,7 +39,7 @@
     projectId: "tableaublanc-edfae",
     storageBucket: "tableaublanc-edfae.appspot.com",
     messagingSenderId: "338342667367",
-    appId: "1:338342667367:web:206957598b4de3311a20c2"
+    appId: "1:338342667367:web:1c0129b1475444851a20c2"
   };
 
   // Initialize Firebase
