@@ -11,16 +11,17 @@ Selection de Modes d'affichage:
 - Postits organisables
 - mindmap
 
+Génération de documents synthèse imprimables
+
 Fonctions de définition/répartition de groupe (aléatoire, au choix ...)
 - Réglage des paramètres au niveau prof
 - Définition de groupes intermédiaires de travail
 
 
 Fonction suivi d'avancement TP/TD
-- points d'étapes de l'activité
+- points d'étapes de l'activité (Création/lancement côté prof, affichage
 - Affichage des avatar des équipes/élèves dans la progression
 - Définition/affichage des élèves ressource
 - Fonction d'appel élèves/ressource > s'affiche sur le smartphone de l'élève
 - Fonction d'appel du prof > Pour les élèves ressource uniquement
 
-Génération de documents synthèse imprimables

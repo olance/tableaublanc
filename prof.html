@@ -1,14 +1,35 @@
 <!doctype html>
-<html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <title>Tableau Blanc pour le prof</title>
+
+  <!-- Include Bulma CSS framework-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <!-- Include Handlebars from a CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
 </head>
 
-<div id=messages-list">
-  <h1 id="lesson-title"></h1>
+<body>
+<!--Section de titre-->
+<section class="hero is-primary">
+  <div class="hero-body">
+    <div class="container">
+      <h1 id="lesson-title" class="title is-1"></h1>
+      <h2 id="lesson-subtitle" class="subtitle is-2"></h2>
+    </div>
+  </div>
+</section>
 
-  <ul id="answers"></ul>
+<!--Liste des messages reçus-->
+<div id=messages-list" class="columns">
+  <div class="column">
+    <ul id="answers">
+    </ul>
+  </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
@@ -64,7 +85,10 @@
     return
   }
 
-  document.querySelector("#lesson-title").innerText = lessonId + " - " + lessonDoc.data().title;
+  document.querySelector("#lesson-title").innerText = lessonDoc.data().title;
+  document.querySelector("#lesson-subtitle").innerText = lessonId;
+
+  let liTemplate = Handlebars.compile(document.querySelector("#li-template").innerHTML);
 
   // Listen for realtime updates: https://firebase.google.com/docs/firestore/query-data/listen?authuser=0
   db.collection("lessons").doc(lessonId).collection("answers").orderBy('timestamp').onSnapshot(answersDoc => {
@@ -73,7 +97,7 @@
       let li = document.createElement("li");
       let time = dateFormat(answer.timestamp);
 
-      li.innerHTML = `<em>${time}</em> - <b>${answer.author} :</b> ${answer.text}`;
+      li.innerHTML = liTemplate({ time, author: answer.author, text: answer.text });
       return li;
     });
 
@@ -82,6 +106,11 @@
 
 })()
 </script>
+
+<script id="li-template" type="text/x-handlebars-template">
+  <em> {{ time }} </em> - <b> {{ author }} :</b> {{ text }}
+</script>
+
 </body>
 
 </html>
