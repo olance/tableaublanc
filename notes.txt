@@ -1,15 +1,26 @@
 ﻿
+Virer Firebase.
 Ajouter gestion des droits
 
 Page de "login" élève
 Page de création Dashboard prof
 
+Bouton reset pour effacer les messages / passer à une nouvelle collection ?
 Fonction pour fusionner des mots/messages élèves
 
 Selection de Modes d'affichage:
+- cours dialogué
 - Nuages de mots
 - Postits organisables
 - mindmap
+- suivi activité
+- Définition de groupe
+
+Cours dialogué
+- Créer nouvelle question (avec options)
+    - Questions en mode "ajout" (réponses multiples possibles) ou "modification" (réponse unique)
+    - Affichage immédiat ou retardé des réponses
+- Sondage
 
 Génération de documents synthèse imprimables
 

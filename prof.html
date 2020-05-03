@@ -25,11 +25,8 @@
 </section>
 
 <!--Liste des messages reçus-->
-<div id=messages-list" class="columns">
-  <div class="column">
-    <ul id="answers">
-    </ul>
-  </div>
+<div id="answers" class="columns is-multiline">
+
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
@@ -88,17 +85,18 @@
   document.querySelector("#lesson-title").innerText = lessonDoc.data().title;
   document.querySelector("#lesson-subtitle").innerText = lessonId;
 
-  let liTemplate = Handlebars.compile(document.querySelector("#li-template").innerHTML);
+  let divTemplate = Handlebars.compile(document.querySelector("#div-template").innerHTML);
 
   // Listen for realtime updates: https://firebase.google.com/docs/firestore/query-data/listen?authuser=0
   db.collection("lessons").doc(lessonId).collection("answers").orderBy('timestamp').onSnapshot(answersDoc => {
     let items = answersDoc.docChanges().filter(c => c.type === "added").map(c => {
       let answer = c.doc.data();
-      let li = document.createElement("li");
+      let div = document.createElement("div");
+      div.setAttribute('class', 'column is-3');
       let time = dateFormat(answer.timestamp);
 
-      li.innerHTML = liTemplate({ time, author: answer.author, text: answer.text });
-      return li;
+      div.innerHTML = divTemplate({ time, author: answer.author, text: answer.text });
+      return div;
     });
 
     document.querySelector("#answers").append(...items);
@@ -107,8 +105,17 @@
 })()
 </script>
 
-<script id="li-template" type="text/x-handlebars-template">
-  <em> {{ time }} </em> - <b> {{ author }} :</b> {{ text }}
+<script id="div-template" type="text/x-handlebars-template">
+  <div class="card">
+    <div class="card-content">
+      <h2 class="title">{{ text }}</h2>
+    </div>
+    <footer class="card-footer">
+      <div class="card-footer-item">
+        {{ author }}
+      </div>
+    </footer>
+  </div>
 </script>
 
 </body>

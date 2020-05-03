@@ -2,12 +2,25 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+
+  <!-- Include Bulma CSS framework-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
   <title>Tableau Blanc</title>
 </head>
 
 <body>
-<h1 id="lesson-title"></h1>
-<h2>Entre ta réponse pour l'envoyer sur le tableau blanc :</h2>
+<section class="hero is-primary">
+  <div class="hero-body">
+    <div class="container">
+      <h2 id="lesson-title" class="subtitle is-size-2"></h2>
+      <h1 id="question-label" class="title is-size-1">Chargement de la question...</h1>
+    </div>
+  </div>
+</section>
+
+<label>Entre ta réponse pour l'envoyer sur le tableau blanc :</label>
 
 <form id="answer-form">
   <p>
@@ -56,16 +69,25 @@
 
   // Get lesson object to display its title
   let lessonDoc = await db.collection("lessons").doc(lessonId).get();
-  // TODO : gros doute, on est d'accord cette fonction est interrompue tant que la réponse L58 n'est pas arrivée ?
+  // TODO : gros doute, on est d'accord cette fonction est interrompue tant que la réponse au-dessus n'est pas arrivée ?
   if (!lessonDoc.exists) {
     alert(`Le cours ${lessonId} n'existe pas !`);
     $form.querySelectorAll("input").forEach(el => el.disabled = true);
     return
   }
 
+  let answers = db.collection("lessons").doc(lessonId).collection("answers");
+  db.collection("lessons").doc(lessonId).collection("questions").where("current", "==", true).get().then(snapshot => {
+    console.log(snapshot.size);
+    snapshot.forEach(result =>{
+      document.querySelector("#question-label").innerText = result.get("label");
+      console.log(result.get("label"));
+    })
+  });
+
   document.querySelector("#lesson-title").innerText = lessonDoc.data().title;
 
-  let answers = db.collection("lessons").doc(lessonId).collection("answers");
+
   $form.addEventListener("submit", (event) => { // Fat-arrow function
     event.preventDefault();
 
